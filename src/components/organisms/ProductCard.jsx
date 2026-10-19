@@ -9,7 +9,7 @@ function ProductCard({ product }) {
   const navigate = useNavigate();
 
   return (
-    <Card style={{ width: '18rem' }} className="m-2">
+    <Card className="m-2 minecraft-product-card">
       <Image src={product.imagen} alt={product.nombre} className="card-img-top" />
       <Card.Body>
         <CardBody

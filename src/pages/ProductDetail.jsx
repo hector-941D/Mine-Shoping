@@ -21,7 +21,7 @@ function ProductDetail() {
 
   return (
     <Container className="my-5">
-      <Card>
+      <Card className="minecraft-detail">
           <Image src={product.imagen} alt={product.nombre} className="card-img-top" />
         <Card.Body>
            <Text variant="h2">{product.nombre}</Text>

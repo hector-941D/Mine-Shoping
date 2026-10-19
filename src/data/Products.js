@@ -1,4 +1,4 @@
-const initialProducts = [
+const products = [
   {
     id: 1,
     nombre: 'Espada de Diamante',
@@ -61,11 +61,11 @@ const loadProductsFromStorage = () => {
     try {
       return JSON.parse(saved);
     } catch (e) {
-      return [...initialProducts];
+      return [...products];
     }
   }
-  localStorage.setItem('mine_products', JSON.stringify(initialProducts));
-  return [...initialProducts];
+  localStorage.setItem('mine_products', JSON.stringify(products));
+  return [...products];
 };
 
 const saveProductsToStorage = (productsList) => {

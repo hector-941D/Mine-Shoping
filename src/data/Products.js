@@ -1,4 +1,4 @@
-let products = [
+const initialProducts = [
   {
     id: 1,
     nombre: 'Espada de Diamante',
@@ -55,16 +55,35 @@ let products = [
   }
 ];
 
+const loadProductsFromStorage = () => {
+  const saved = localStorage.getItem('mine_products');
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      return [...initialProducts];
+    }
+  }
+  localStorage.setItem('mine_products', JSON.stringify(initialProducts));
+  return [...initialProducts];
+};
+
+const saveProductsToStorage = (productsList) => {
+  localStorage.setItem('mine_products', JSON.stringify(productsList));
+};
+
 export const getItems = () => {
-  return [...products];
+  return loadProductsFromStorage();
 };
 
 export const getItemById = (id) => {
+  const products = loadProductsFromStorage();
   const item = products.find((item) => item.id === Number(id));
   return item ? { ...item } : null;
 };
 
 export const addItem = (nuevoItem) => {
+  const products = loadProductsFromStorage();
   const nextId = products.length > 0 ? Math.max(...products.map((i) => i.id)) + 1 : 1;
   const createdItem = {
     ...nuevoItem,
@@ -73,25 +92,31 @@ export const addItem = (nuevoItem) => {
     stock: Number(nuevoItem.stock) || 0
   };
   products.push(createdItem);
+  saveProductsToStorage(products);
   return { ...createdItem };
 };
 
 export const updateItem = (id, actualizar) => {
+  let products = loadProductsFromStorage();
   const index = products.findIndex((item) => item.id === Number(id));
   if (index === -1) return null;
 
-  products[index] = {...products[index],
+  products[index] = {
+    ...products[index],
     ...actualizar,
     id: Number(id),
     precio_esmeraldas: Number(actualizar.precio_esmeraldas ?? products[index].precio_esmeraldas),
     stock: Number(actualizar.stock ?? products[index].stock)
   };
 
+  saveProductsToStorage(products);
   return { ...products[index] };
 };
 
 export const deleteItem = (id) => {
+  let products = loadProductsFromStorage();
   const initialLength = products.length;
   products = products.filter((item) => item.id !== Number(id));
+  saveProductsToStorage(products);
   return products.length < initialLength;
 };
